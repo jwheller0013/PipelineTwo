@@ -6,6 +6,7 @@ pass
 
 # Import the csv module
 # Import any other modules you need (e.g., collections for defaultdict)
+import csv
 
 # Initialize data structures to hold our results
 # Hint: Consider using a dictionary with store_id as keys
@@ -45,3 +46,49 @@ pass
 
 # Print a summary of statistics for each store
 # Print which store had the highest average daily revenue
+store_template = {
+    "Days": 0,
+    "items_sold": 0,
+    "total_Revenue": 0,
+    "min_Revenue": None,
+    "max_Revenue": None,
+    "transactions": 0
+}
+
+stores = {
+}
+
+
+with open('store_sales.csv', 'r', newline='') as file:
+    # Create a CSV reader
+    csv_reader = csv.reader(file)
+
+    sum_of_items = 0
+    lines = 0
+    for line in csv_reader:
+        print(line)
+        if lines == 0:
+            lines += 1
+            continue
+        sum_of_items += int(line[2])
+        curstore = line[1]
+        if stores.get(curstore) == None:
+            stores[curstore] = store_template.copy()
+        stores[curstore]["items_sold"] += int(line[2])
+        stores[curstore]["Days"] += 1
+        stores[curstore]['transactions'] += 1
+        x = round(float(line[3]), 2)
+
+        stores[curstore]["total_Revenue"] += x
+
+        if stores[curstore]["min_Revenue"] is None or x < stores[curstore]["min_Revenue"] :
+            stores[curstore]["min_Revenue"] = x
+
+        if stores[curstore]["max_Revenue"] is None or x > stores[curstore]["max_Revenue"] :
+            stores[curstore]["max_Revenue"] = x
+
+        lines += 1
+
+    print(f"Total number of items sold: {sum_of_items}")
+    print(f"Total number of transactions: {lines}")
+    print(stores)
