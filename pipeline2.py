@@ -92,3 +92,29 @@ with open('store_sales.csv', 'r', newline='') as file:
     print(f"Total number of items sold: {sum_of_items}")
     print(f"Total number of transactions: {lines}")
     print(stores)
+
+store_averages = {}
+for store_id, data in stores.items():
+    days = data["Days"]
+    if days > 0:
+        avg_items = data['items_sold'] / days
+        avg_revenue = data['total_Revenue'] / days
+        store_averages[store_id] = {
+            "avg_items_per_day": avg_items,
+            "avg_rev_per_day": avg_revenue
+        }
+    else:
+        store_averages[store_id] = {
+            "avg_items_per_day": 0,
+            "avg_rev_per_day": 0
+        }
+print(store_averages)
+
+highest = 0
+top_store = None
+for store_id, average in store_averages.items():
+    if average["avg_rev_per_day"] > highest:
+        highest = average["avg_rev_per_day"]
+        top_store = store_id
+
+print(top_store)
